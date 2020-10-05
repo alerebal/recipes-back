@@ -1,13 +1,14 @@
 const { connect } = require('mongoose');
 
-const url = `mongodb://${process.env.URL}`
-const address = process.env.ADDRESS
+const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.x2ibd.mongodb.net/test?retryWrites=true&w=majority`
 
-connect(`${url}${address}`, {
+
+
+connect(`${url}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
 })
-    .then(console.log(`Database ${address} is connected ${url}${address}`))
+    .then(console.log(`Database is connected`))
     .catch(err => console.log(err));
