@@ -7,11 +7,13 @@ const {
     addPhoto,
     deletePhoto,
     editRecipe,
-    deleteRecipe
+    deleteRecipe,
+    index
 } = require('../controllers/recipes.controller');
 
 router.get('/recipe/:id', getRecipe),
 router.get('/recipes', getRecipes),
+router.get('/', index)
 
 router.post('/recipe', addRecipe)
 router.post('/addPhoto', addPhoto)

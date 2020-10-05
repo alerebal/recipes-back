@@ -8,6 +8,10 @@ const Recipe = require('../models/Recipe');
 
 cloudinary.cloud
 
+recipeCtrl.index = (req, res) => {
+    res.send(`<h1>Index backend recipes</h1>`)
+}
+
 // get recipe and recipes
 recipeCtrl.getRecipe = async (req, res) => {
     const {id} = req.params;

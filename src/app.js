@@ -30,9 +30,6 @@ const storage = multer.diskStorage({
 app.use(multer({storage}).single('image'));
 
 // Routes
-app.use('/', (req, res) => {
-    res.send('index')
-})
 app.use(require('./routes/recipes.routes'));
 app.use(require('./routes/products.routes'));
 
