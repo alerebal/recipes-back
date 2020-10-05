@@ -10,7 +10,7 @@ const app = express();
 require('./database');
 
 // Settings
-app.set('port', process.env.PORT | 3300);
+app.set('port', process.env.PORT || 3300);
 const corsOptions = {
     origin: 'http://localhost:4200',
     optionSuccessStatus: 200
