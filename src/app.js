@@ -12,9 +12,11 @@ require('./database');
 // Settings
 app.set('port', process.env.PORT || 3300);
 const corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: 'https://recipes-front.vercel.app/',
     optionSuccessStatus: 200
 }
+
+// do not forget put corsOptions
 
 // Middlewares
 app.use(morgan('dev'));
@@ -32,6 +34,7 @@ app.use(multer({storage}).single('image'));
 // Routes
 app.use(require('./routes/recipes.routes'));
 app.use(require('./routes/products.routes'));
+app.use(require('./routes/user.routes'));
 
 
 module.exports = app;

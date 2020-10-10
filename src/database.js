@@ -1,8 +1,8 @@
 const { connect } = require('mongoose');
 
-const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.x2ibd.mongodb.net/test?retryWrites=true&w=majority`
+// const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.x2ibd.mongodb.net/test?retryWrites=true&w=majority`
 
-
+const url = 'mongodb://localhost/recipesDB'
 
 connect(`${url}`, {
     useNewUrlParser: true,
