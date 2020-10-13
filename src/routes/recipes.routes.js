@@ -10,11 +10,13 @@ const {
     deletePhoto,
     editRecipe,
     deleteRecipe,
+    getUserRecipes,
     index
 } = require('../controllers/recipes.controller');
 
 router.get('/recipe/:id', getRecipe),
 router.get('/recipes', getRecipes),
+router.get('/userRecipes/:id', getUserRecipes)
 router.get('/', index)
 
 router.post('/recipe', addRecipe)

@@ -1,8 +1,8 @@
 const {Schema, model} = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
 
 const recipeSchema = new Schema({
-    name: {type: String, required: true, unique: true},
+    userId: Schema.Types.ObjectId,
+    name: {type: String, required: true},
     preparation: [String],
     ingredients: [Schema.Types.Mixed],
     kcalTot: Number,
@@ -13,6 +13,5 @@ const recipeSchema = new Schema({
     timestamps: true
 })
 
-recipeSchema.plugin(uniqueValidator);
 
 module.exports = model('Recipe', recipeSchema);

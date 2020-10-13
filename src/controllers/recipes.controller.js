@@ -12,7 +12,7 @@ recipeCtrl.index = (req, res) => {
     res.send(`<h1>Index backend recipes</h1>`)
 }
 
-// get recipe and recipes
+// get recipe, recipes and userRecipes
 recipeCtrl.getRecipe = async (req, res) => {
     const {id} = req.params;
     const recipe = await Recipe.findById(id)
@@ -20,35 +20,47 @@ recipeCtrl.getRecipe = async (req, res) => {
 }
 
 recipeCtrl.getRecipes = async (req, res) => {
-    const recipes = await Recipe.find().sort({createdAt: 'desc'});
+    const recipes = await Recipe.find({userId: '5f835e2ba4c29a1c15c59da2'}).sort({createdAt: -1});
     res.json(recipes)
+}
+
+recipeCtrl.getUserRecipes = async (req, res) => {
+    const {id} = req.params;
+    const recipes = await Recipe.find({userId: id}).sort({createdAt: -1})
+    res.json(recipes);
 }
 
 // add a new recipe
 recipeCtrl.addRecipe = async (req, res) => {
-    const {name, preparation, kcalTot, servings} = req.body.recipe;
+    const {userId, name, preparation, kcalTot, servings} = req.body.recipe;
     const {ingredients} = req.body;
     // recipe with image
     if (req.body.image) {
         const {image, imageId} = req.body.image;
-        recipe = new Recipe({ name, preparation, ingredients, kcalTot, servings, filePath: image, fileId: imageId});
-        await recipe.save(function(err) {
-            // if name is alredy exists
-            if (err) {
-                return res.status(400).send({message: 'The name of recipe already exists'})
-            }
+        const recipe = new Recipe({ userId, name, preparation, ingredients, kcalTot, servings, filePath: image, fileId: imageId});
+        const recipes = await Recipe.find({userId: userId})
+        // if user alredy has a recipe with the same name
+        const nameExists = recipes.filter(item => item.name === name)
+        if (nameExists.length > 0) {
+            await cloudinary.v2.uploader.destroy(imageId)
+            return res.status(400).json({message: 'You already have a recipe with that name'})
+        } else {
+            await recipe.save()
             return res.status(200).json(recipe)
-        })
+        }
     }
     // recipe without image
     if (!req.body.image) {
-        recipe = new Recipe({ name, preparation, ingredients, kcalTot, servings, filePath: null});
-        await recipe.save(function(err) {
-            if (err) {
-                return res.status(400).send({message: 'The name of recipe already exists'})
-            }
+        const recipe = new Recipe({userId, name, preparation, ingredients, kcalTot, servings, filePath: null});
+        const recipes = await Recipe.find({userId: userId});
+        // if user alredy has a recipe with the same name
+        const nameExists = recipes.filter(item => item.name === name)
+        if (nameExists.length > 0) {
+            return res.status(400).json({message: 'You already have a recipe with that name'})
+        } else {
+            await recipe.save()
             return res.status(200).json(recipe)
-        })
+        }
     }
 
 }
