@@ -20,7 +20,7 @@ recipeCtrl.getRecipe = async (req, res) => {
 }
 
 recipeCtrl.getRecipes = async (req, res) => {
-    const recipes = await Recipe.find({userId: '5f835e2ba4c29a1c15c59da2'}).sort({createdAt: -1});
+    const recipes = await Recipe.find({userId: process.env.ADMIN_SERVER}).sort({createdAt: -1});
     res.json(recipes)
 }
 
@@ -32,12 +32,12 @@ recipeCtrl.getUserRecipes = async (req, res) => {
 
 // add a new recipe
 recipeCtrl.addRecipe = async (req, res) => {
-    const {userId, name, preparation, kcalTot, servings} = req.body.recipe;
+    const {userId, name, preparation, weightTot, kcalTot, servings} = req.body.recipe;
     const {ingredients} = req.body;
     // recipe with image
     if (req.body.image) {
         const {image, imageId} = req.body.image;
-        const recipe = new Recipe({ userId, name, preparation, ingredients, kcalTot, servings, filePath: image, fileId: imageId});
+        const recipe = new Recipe({ userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: image, fileId: imageId});
         const recipes = await Recipe.find({userId: userId})
         // if user alredy has a recipe with the same name
         const nameExists = recipes.filter(item => item.name === name)
@@ -51,7 +51,7 @@ recipeCtrl.addRecipe = async (req, res) => {
     }
     // recipe without image
     if (!req.body.image) {
-        const recipe = new Recipe({userId, name, preparation, ingredients, kcalTot, servings, filePath: null});
+        const recipe = new Recipe({userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: null});
         const recipes = await Recipe.find({userId: userId});
         // if user alredy has a recipe with the same name
         const nameExists = recipes.filter(item => item.name === name)
@@ -63,6 +63,21 @@ recipeCtrl.addRecipe = async (req, res) => {
         }
     }
 
+}
+
+// copy a recipe
+recipeCtrl.copyRecipe = async (req, res) => {
+    const userId = req.params;
+    const recipeToCopy = req.body
+    const newRecipe = new Recipe();
+    const newId = newRecipe.id 
+    const newCreate = newRecipe.createdAt
+    Object.assign(newRecipe, recipeToCopy)
+    newRecipe._id = newId
+    newRecipe.userId = userId.id
+    newRecipe.createdAt = newCreate
+    await newRecipe.save()
+    res.status(200).json(newRecipe);
 }
 
 // add and delete a photo to cloudinary

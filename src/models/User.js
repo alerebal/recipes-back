@@ -22,5 +22,5 @@ userSchema.methods.matchPassword = async function(password) {
 }
 
 
-module.exports = model('RecipeUser', userSchema);
+module.exports = model('User', userSchema);
 

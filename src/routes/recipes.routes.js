@@ -6,6 +6,7 @@ const {
     getRecipe,
     getRecipes,
     addRecipe,
+    copyRecipe,
     addPhoto,
     deletePhoto,
     editRecipe,
@@ -21,6 +22,7 @@ router.get('/', index)
 
 router.post('/recipe', addRecipe)
 router.post('/addPhoto', addPhoto)
+router.post('/copyRecipe/:id', copyRecipe)
 
 router.put('/recipeEdit/:id', editRecipe)
 

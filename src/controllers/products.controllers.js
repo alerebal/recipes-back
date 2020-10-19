@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 
 // get product, products and userProducts
 productCtrl.getProducts = async (req, res) => {
-    const id = process.env.ADMIN_ID;
+    const id = process.env.ADMIN_SERVER;
     const products = await Product.find({userId: id}).sort({name: 1});
     res.json(products)
 }
@@ -23,7 +23,7 @@ productCtrl.getUserProducts = async (req, res) => {
 
 productCtrl.getAll = async (req, res) => {
     const {id} = req.params;
-    const adminId = process.env.ADMIN_ID
+    const adminId = process.env.ADMIN_SERVER
     const userProducts = await Product.find({userId: id})
     const appProducts = await Product.find({userId: adminId})
     const allProducts = userProducts.concat(appProducts).sort(
