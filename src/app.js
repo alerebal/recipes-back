@@ -12,7 +12,7 @@ require('./database');
 // Settings
 app.set('port', process.env.PORT || 3300);
 const corsOptions = {
-    origin: 'https://recipes-front.vercel.app/',
+    origin: process.env.CORS_OPTIONS,
     optionSuccessStatus: 200
 }
 
