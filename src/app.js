@@ -19,7 +19,7 @@ const corsOptions = {
 
 // Middlewares
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 const storage = multer.diskStorage({
