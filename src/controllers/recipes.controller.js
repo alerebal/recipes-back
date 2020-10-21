@@ -37,7 +37,7 @@ recipeCtrl.addRecipe = async (req, res) => {
     // recipe with image
     if (req.body.image) {
         const {image, imageId} = req.body.image;
-        const recipe = new Recipe({ userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: image, fileId: imageId});
+        const recipe = new Recipe({ userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: image, fileId: imageId, isCopy: false});
         const recipes = await Recipe.find({userId: userId})
         // if user alredy has a recipe with the same name
         const nameExists = recipes.filter(item => item.name === name)
@@ -51,7 +51,7 @@ recipeCtrl.addRecipe = async (req, res) => {
     }
     // recipe without image
     if (!req.body.image) {
-        const recipe = new Recipe({userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: null});
+        const recipe = new Recipe({userId, name, preparation, ingredients, weightTot, kcalTot, servings, filePath: null, isCopy: false});
         const recipes = await Recipe.find({userId: userId});
         // if user alredy has a recipe with the same name
         const nameExists = recipes.filter(item => item.name === name)
@@ -76,6 +76,7 @@ recipeCtrl.copyRecipe = async (req, res) => {
     newRecipe._id = newId
     newRecipe.userId = userId.id
     newRecipe.createdAt = newCreate
+    newRecipe.isCopy = true;
     await newRecipe.save()
     res.status(200).json(newRecipe);
 }
@@ -122,7 +123,8 @@ recipeCtrl.editRecipe = async (req, res) => {
 recipeCtrl.deleteRecipe = async (req, res) => {
     const {id} = req.params
     const recipe = await Recipe.findById(id);
-    if (recipe.filePath) {
+    // if is not a copy, delete the image
+    if (recipe.filePath && !recipe.isCopy) {
         await cloudinary.v2.uploader.destroy(recipe.fileId);
     } 
     await Recipe.findByIdAndRemove(id)

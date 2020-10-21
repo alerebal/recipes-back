@@ -11,7 +11,8 @@ const recipeSchema = new Schema({
     kcalTot: Number,
     servings: Number,
     filePath: String,
-    fileId: String
+    fileId: String,
+    isCopy: Boolean
 }, {
     timestamps: true
 })
